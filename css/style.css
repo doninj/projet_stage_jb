@@ -1,0 +1,42 @@
+.navbar{
+    background-color: #0a5da9!important;
+    padding-left: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+img{
+    width: 120px;
+}
+#bienvenue{
+    display: none;
+    margin-bottom: 0px;
+    color: white;
+    font-size: 40px;
+}
+.ml-auto{
+    margin-left: 0px!important;
+}
+#recherche{
+    background-color: lightcoral;
+}
+
+#example_wrapper{
+
+    padding: 20px;
+}
+input{
+    border-radius: 20px;
+}
+.paginate_button:hover{
+    background-color: none;
+}
+th{
+    background-color: aliceblue;
+}
+.form-inline{
+    display: block !important;
+}
+.container{
+
+   margin-top:14px!important; 
+}
