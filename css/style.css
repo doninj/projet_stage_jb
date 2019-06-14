@@ -30,7 +30,7 @@ input{
 .paginate_button:hover{
     background-color: none;
 }
-.tr{
+tr{
     cursor:pointer;
 }
 th{
