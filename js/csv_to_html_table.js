@@ -49,8 +49,11 @@ function init_table(options) {
         row_html += "</tr>";
         $('#my-table tbody').append(row_html);
       }
+      //fonction format qui permet de créer le sous tableau
+      //sortie: sous tableau
+      //
       function format ( d ) {
-
+        //boucle for qui permet de changer le row_id
         for (row_id = 1; row_id < csv_data.length; row_id++) {
       
         // `d` is the original data object for the row
