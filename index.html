@@ -65,8 +65,9 @@
   <script src="js/jquery.dataTables.min.js"></script>
   <script src="js/dataTables.bootstrap.js"></script>
   <script src='js/csv_to_html_table.js'></script>
-  
   <script>
+
+
     $(document).ready(function() {
       $('#bienvenue').fadeIn(4000);
 
@@ -85,34 +86,37 @@
       datatables_options: {
         
         
-        "paging": true,
+        
+        autoWidth: false,
+      
+        paging: true,
         responsive: true,
         
         rowCallback: function (row, data, index) {
             
-                //condition si data[3]>60 donc si l'une des valeurs de la colonne 3 est superieur à 60
-                if ( data[4]>20 && data[4]<60) {
-                    $(row).find('td:eq(4)').css('background-color',
-                        'lightcoral'); // find ('td:eq(3)) permet de selectionner la 3ème colonne//
-                    $(row).find('td:eq(4)').css('color', 'white');
+                //condition si data[5]>60 donc si l'une des valeurs de la colonne 5 est superieur à 60
+                if ( data[5]>20 && data[5]<60) {
+                    $(row).find('td:eq(5)').css('background-color',
+                        'lightcoral'); // find ('td:eq(5)) permet de selectionner la 3ème colonne//
+                    $(row).find('td:eq(5)').css('color', 'white');
 
 
                 }
                 
-                if (data[4] > 60 && data[4]<80) {
-                    $(row).find('td:eq(4)').css('background-color','rgb(10, 93, 169,0.7');
-                    $(row).find('td:eq(4)').css('color', 'white');
+                if (data[5] >= 60 && data[5]<80) {
+                    $(row).find('td:eq(5)').css('background-color','rgb(10, 93, 169,0.7');
+                    $(row).find('td:eq(5)').css('color', 'white');
 
                 }
-                if (data[4]>=80) {
-                    $(row).find('td:eq(4)').css('background-color','rgb(10, 93, 169,0.9');
-                    $(row).find('td:eq(4)').css('color', 'white');
+                if (data[5]>=80) {
+                    $(row).find('td:eq(5)').css('background-color','rgb(10, 93, 169,0.9');
+                    $(row).find('td:eq(5)').css('color', 'white');
 
                 }
                 
-                if ( data[4]<=20) {
-                    $(row).find('td:eq(4)').css('background-color','red'); // find ('td:eq(3)) permet de selectionner la 3ème colonne//
-                    $(row).find('td:eq(4)').css('color', 'white');
+                if ( data[5]<=20) {
+                    $(row).find('td:eq(5)').css('background-color','red'); // find ('td:eq(3)) permet de selectionner la 3ème colonne//
+                    $(row).find('td:eq(5)').css('color', 'white');
 
 
                 }
@@ -120,6 +124,7 @@
             }
       }
     });
+    
     });
   </script>
 

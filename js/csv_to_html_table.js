@@ -1,3 +1,5 @@
+
+
 function init_table(options) {
 
   options = options || {};
@@ -47,10 +49,39 @@ function init_table(options) {
         row_html += "</tr>";
         $('#my-table tbody').append(row_html);
       }
+      function format ( d ) {
 
-      $("#my-table").DataTable(datatables_options);
+        for (row_id = 1; row_id < csv_data.length; row_id++) {
+      
+        // `d` is the original data object for the row
+        return '<table  style="display:inline;" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+            '<tr>'+
+                '<td>OS :</td>'+
+                '<td>'+csv_data[row_id][6]+'</td>'+
+            '</tr>'
+            +
+        '</table>';
+    }}
+     var table= $("#my-table").DataTable(datatables_options);
 
       if (allow_download)
         $("#" + el).append("<p><a class='btn btn-info' href='" + csv_path + "'><i class='glyphicon glyphicon-download'></i> Download as CSV</a></p>");
+        $('#my-table tbody').on('click', 'tr', function () {
+          var tr = $(this).closest('tr');
+        var row = table.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // ferme les row si il est ouvert
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Ouvre les rows
+            row.child( format(row.data()) ).show(); 
+            tr.addClass('shown');
+
+        }
+        
     });
+  } );
 }
