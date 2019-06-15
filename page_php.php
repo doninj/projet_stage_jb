@@ -12,6 +12,13 @@ catch(Exception $e)
 }
 $reponse = $bdd->query('SELECT * FROM site_carrefour');
 
+$table = "site_carrefour";
+$sql = "SHOW TABLE STATUS LIKE '$table'";
+
+$req = $bdd->query($sql);
+$data = $req->fetch();
+$derniere_modif = $data['Update_time'];
+
 
 ?>
 
@@ -60,7 +67,7 @@ $reponse = $bdd->query('SELECT * FROM site_carrefour');
             </ul>
             </div>
             </header>
-
+<?php echo $derniere_modif ?>
             <div class="container">
                 <div >
                     <table id="employee_data" class="table-striped table-bordered">
@@ -122,9 +129,71 @@ while ($row=$reponse->fetch())
 
     <script> $(document).ready(function(){
 
-$("#employee_data").DataTable();
+function format ( d ) {
+        //boucle for qui permet de changer le row_id
+      
+      
+        // `d` is the original data object for the row
+        return '<table  style="display:inline;" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+            '<tr>'+
+                '<td>OS :</td>'+
+                '<td>'+'<?php echo $derniere_modif ?>'+'</td>'+
+            '</tr>'
+            +
+        '</table>';
+    }
+
+var table=$("#employee_data").DataTable();
+
+$('#employee_data tbody').on('click', 'tr', function () {
+          var tr = $(this).closest('tr');
+        var row = table.row( tr );
+        
+        if ( row.child.isShown() ) {
+            // ferme les row si il est ouvert
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Ouvre les rows
+            row.child( format(row.data()) ).show(); 
+            tr.addClass('shown');
+
+        }
+        
+    });
+table.destroy();
+$("#employee_data").DataTable({
+       rowCallback: function (row, data, index) {
+            
+            //condition si data[5]>60 donc si l'une des valeurs de la colonne 5 est superieur à 60
+            if ( data[5]>20 && data[5]<60) {
+                $(row).find('td:eq(5)').css('background-color',
+                    'lightcoral'); // find ('td:eq(5)) permet de selectionner la 3ème colonne//
+                $(row).find('td:eq(5)').css('color', 'white');
 
 
+            }
+            
+            if (data[5] >= 60 && data[5]<80) {
+                $(row).find('td:eq(5)').css('background-color','rgb(10, 93, 169,0.7');
+                $(row).find('td:eq(5)').css('color', 'white');
+
+            }
+            if (data[5]>=80) {
+                $(row).find('td:eq(5)').css('background-color','rgb(10, 93, 169,0.9');
+                $(row).find('td:eq(5)').css('color', 'white');
+
+            }
+            
+            if ( data[5]<=20) {
+                $(row).find('td:eq(5)').css('background-color','red'); // find ('td:eq(3)) permet de selectionner la 3ème colonne//
+                $(row).find('td:eq(5)').css('color', 'white');
+
+
+            }
+            
+        }});
 
 
     });
