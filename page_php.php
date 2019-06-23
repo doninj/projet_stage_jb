@@ -3,28 +3,39 @@
 try
 {
 	// On se connecte à MySQL
-	$bdd = new PDO('mysql:host=localhost:3307;dbname=carrefour;charset=utf8', 'root', '');
+	$bdd = new PDO('mysql:host=localhost:3307;dbname=carrefour;charset=utf8', 'root', '',array(
+        PDO::MYSQL_ATTR_LOCAL_INFILE => true,
+    ));
 }
 catch(Exception $e)
 {
 	// En cas d'erreur, on affiche un message et on arrête tout
         die('Erreur : '.$e->getMessage());
 }
-$reponse = $bdd->query('SELECT * FROM site_carrefour');
+    //supression de la table
 
+    /*
+    $del = 'DELETE FROM `site_carrefour`';
+$insertion_req=$bdd->query($del);
+
+$sql_2 = 'LOAD DATA LOCAL INFILE \'Classeur1_1.csv\' REPLACE INTO TABLE `site_carrefour` FIELDS TERMINATED BY \';\' ENCLOSED BY \'\' ESCAPED BY \'\' LINES TERMINATED BY \'\\r\\n\' IGNORE 1 LINES';
+ 
+$insertion_req=$bdd->query($sql_2);
+*/
+
+$Firstreq = $bdd->query('SELECT * FROM site_carrefour');
 $table = "site_carrefour";
 $sql = "SHOW TABLE STATUS LIKE '$table'";
 
 $req = $bdd->query($sql);
 $data = $req->fetch();
-$derniere_modif = $data['Update_time'];
-
+$last_modification = $data['Update_time'];
 
 ?>
 
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="utf-8">
@@ -58,7 +69,7 @@ $derniere_modif = $data['Update_time'];
 
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-                    <p id="bienvenue">Bienvenue !</p>
+                    <p id="bienvenue"><?php echo $last_modification ?></p>
                 </li>
             </ul>
 
@@ -67,7 +78,7 @@ $derniere_modif = $data['Update_time'];
             </ul>
             </div>
             </header>
-<?php echo $derniere_modif ?>
+<?php echo $last_modification ?>
             <div class="container">
                 <div >
                     <table id="employee_data" class="table-striped table-bordered">
@@ -83,7 +94,7 @@ $derniere_modif = $data['Update_time'];
                             </tr>
                         </thead>
 <?php 
-while ($row=$reponse->fetch())
+while ($row=$Firstreq->fetch())
 {
     echo '
     <tr>
@@ -127,7 +138,8 @@ while ($row=$reponse->fetch())
     <script src="js/dataTables.bootstrap.js"></script>
     <script src='js/csv_to_html_table.js'></script>
 
-    <script> $(document).ready(function(){
+    <script> 
+    $(document).ready(function(){
 
 function format ( d ) {
         //boucle for qui permet de changer le row_id
@@ -137,7 +149,7 @@ function format ( d ) {
         return '<table  style="display:inline;" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
             '<tr>'+
                 '<td>OS :</td>'+
-                '<td>'+'<?php echo $derniere_modif ?>'+'</td>'+
+                '<td>'+'<?php echo $last_modification ?>'+'</td>'+
             '</tr>'
             +
         '</table>';
