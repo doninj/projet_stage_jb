@@ -81,7 +81,7 @@ $last_modification = $data['Update_time'];
 <?php echo $last_modification ?>
             <div class="container">
                 <div >
-                    <table id="employee_data" class="table-striped table-bordered">
+                    <table id="employee_data" class="table table-striped  nowrap" style="width:100%">
                         <thead>
                             <tr>
                                 <td>Ville</td>
@@ -141,6 +141,8 @@ while ($row=$Firstreq->fetch())
     <script> 
     $(document).ready(function(){
 
+        //fonction simple qui permet d'afficher progressivement l"heure
+        $('#bienvenue').fadeIn(4000);
 function format ( d ) {
         //boucle for qui permet de changer le row_id
       
@@ -172,10 +174,13 @@ $('#employee_data tbody').on('click', 'tr', function () {
             tr.addClass('shown');
 
         }
+        new $.fn.dataTable.FixedHeader( table );
         
     });
 table.destroy();
 $("#employee_data").DataTable({
+    responsive: true,
+    
        rowCallback: function (row, data, index) {
             
             //condition si data[5]>60 donc si l'une des valeurs de la colonne 5 est superieur à 60
