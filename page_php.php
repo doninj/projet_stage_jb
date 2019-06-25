@@ -3,7 +3,7 @@
 try
 {
 	// On se connecte à MySQL
-	$bdd = new PDO('mysql:host=localost:3306;dbname=carrefour;charset=utf8', 'root', '',array(
+	$bdd = new PDO('mysql:host=localhost:3307;dbname=carrefour;charset=utf8', 'root', '',array(
         PDO::MYSQL_ATTR_LOCAL_INFILE => true,
     ));
 }
@@ -69,7 +69,7 @@ $last_modification = $data['Update_time'];
 
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-                    <p id="bienvenue"><?php echo $last_modification ?></p>
+                    <p id="bienvenue">Date de modification: <?php echo $last_modification ?></p>
                 </li>
             </ul>
 
@@ -93,25 +93,27 @@ $last_modification = $data['Update_time'];
                                 <td> OS </td>
                             </tr>
                         </thead>
-<?php 
+<?php
+
+//affiche les ligne de la base de donnée une à une dans un tableau
 while ($row=$Firstreq->fetch())
 {
-    echo '
+  ?>   
     <tr>
 
-    <td>'.$row["VILLE"].'</td>
-    <td>'.$row["VM"].'</td>
-    <td>'.$row["Disk"].'</td>
+    <td><?php echo $row["VILLE"];?></td>
+    <td><?php echo $row["VM"];?></td>
+    <td><?php echo $row["Disk"];?></td>
 
-    <td>'.$row["Capacity MB"].'</td>
-    <td>'.$row["Free MB"].'</td>
-    <td>'.$row["Free %"].'</td>
+    <td><?php echo $row["Capacity MB"];?></td>
+    <td><?php echo $row["Free MB"];?></td>
+    <td><?php echo $row["Free %"];?></td>
+
+    <td><?php echo $row["OS according to the configuration file"];?></td>
     
-    <td>'.$row["OS according to the configuration file"].'</td>
-
     </tr>
-    ';
-}
+  <?php  
+} //fin du tableau: toute les données de la bdd sont dans le tableau
 ?>
                     </table>
                 </div>
@@ -179,7 +181,26 @@ $('#employee_data tbody').on('click', 'tr', function () {
     });
 table.destroy();
 $("#employee_data").DataTable({
-    responsive: true,
+    initComplete: function () {
+            this.api().columns().every( function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+            } );
+    },
     
        rowCallback: function (row, data, index) {
             
