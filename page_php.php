@@ -3,7 +3,7 @@
 try
 {
 	// On se connecte à MySQL
-	$bdd = new PDO('mysql:host=localost:3306;dbname=carrefour;charset=utf8', 'root', '',array(
+	$bdd = new PDO('mysql:host=localhost:3306;dbname=carrefour;charset=utf8', 'root', '',array(
         PDO::MYSQL_ATTR_LOCAL_INFILE => true,
     ));
 }
