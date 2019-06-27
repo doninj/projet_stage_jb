@@ -2,11 +2,16 @@
 
 try
 {
+<<<<<<< HEAD
 	//* On se connecte à postgresql
     $bdd= new PDO("pgsql:host=localhost;dbname=postgres","postgres","root");
     
     /* On se connecte à MySQL
 	$bdd = new PDO('mysql:host=localhost:3307;dbname=carrefour;charset=utf8', 'root', '',array(
+=======
+	// On se connecte à MySQL
+	$bdd = new PDO('mysql:host=localhost:3306;dbname=carrefour;charset=utf8', 'root', '',array(
+>>>>>>> a1b45763f9415669b215227e07904baed9cc0386
         PDO::MYSQL_ATTR_LOCAL_INFILE => true,
         */
     ));
@@ -233,4 +238,9 @@ while ($row=$querySelect->fetch())
         }); //fin de 
     }); //fin du script
 
+<<<<<<< HEAD
 </script>
+=======
+    });
+    </script>
+>>>>>>> a1b45763f9415669b215227e07904baed9cc0386
