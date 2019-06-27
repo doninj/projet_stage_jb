@@ -3,8 +3,7 @@
 try
 {
 	// On se connecte à MySQL
-	$bdd = new PDO('mysql:host=localhost:3306;dbname=carrefour;charset=utf8', 'root', '',array(
-        PDO::MYSQL_ATTR_LOCAL_INFILE => true,  ));
+	$bdd = new PDO("pgsql:host=localhost;dbname=postgres","postgres","root");
 }
 catch(Exception $e)
 {
@@ -41,14 +40,13 @@ last_modification = $dataInformation['Update_time'];
     <title>CSV to HTML Table Example</title>
     <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
-        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="CSS/style.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js">
-    <script type='text/javascript' src='js/jquery.particleground.js'></script>
-    <script src='js/demo.js'></script>
+    <link rel="stylesheet" href=https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css>
+
+    <link rel="stylesheet" href="css/style.css">
+
+   <link rel="stylesheet" href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css'>
+
+<link ref="stylesheet" href='https://cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap4.min.css'>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -83,9 +81,9 @@ last_modification = $dataInformation['Update_time'];
     ?>
 
     <div class="container">
-        <div>
+        <div class="table-responsive">
             <!-- creation de la table -->
-            <table id="employee_data" class="table table-striped  nowrap" style="width:100%">
+            <table id="employee_data" class="table table-striped table-hover dt-responsive display nowrap" width="100%">>
                 <thead>
                     <tr>
                         <td>Ville</td>
@@ -123,20 +121,18 @@ while ($row=$querySelect->fetch())
             </table>
         </div>
     </div>
-
+</div>
 </html>
 
-
-<!-- Bootstrap core JavaScript
-    ================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script src="js/jquery.csv.min.js"></script>
-<script src="js/jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap.js"></script>
-<script src='js/csv_to_html_table.js'></script>
-
+            <!-- script pour jquery/bootstrap et datatable-->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>  
+    <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
+                        <!-- Script pour bouton -->
+<script src='https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js'></script>
+<script src='https://cdn.datatables.net/buttons/1.5.6/js/buttons.bootstrap4.min.js'></script>
+<script src='https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js'></script>
 <script>
     $(document).ready(function () {
 
@@ -171,32 +167,12 @@ while ($row=$querySelect->fetch())
                 tr.addClass('shown');
 
             }
-            new $.fn.dataTable.FixedHeader(table);
 
         });
         table.destroy();
 
         $("#employee_data").DataTable({
-
-            /*initComplete: function () {
-                this.api().columns().every(function () {
-                    var column = this;
-                    var select = $('<select><option value=""></option></select>')
-                    .appendTo($(column.footer()).empty())
-                    .on('change', function () {
-                          var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                        column
-                        .search(val ? '^' + val + '$' : '', true, false)
-                        .draw();
-                    });
-
-                    column.data().unique().sort().each(function (d, j) 
-                    {
-                        select.append('<option value="' + d + '">' + d +'</option>')
-                    });
-                });
-            },*/
+            "responsive": true,
 
             rowCallback: function (row, data, index) {
 
@@ -228,9 +204,5 @@ while ($row=$querySelect->fetch())
         }); //fin de 
     }); //fin du script
 
-<<<<<<< HEAD
-</script>
-=======
-    });
+   
     </script>
->>>>>>> a1b45763f9415669b215227e07904baed9cc0386
