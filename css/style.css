@@ -1,59 +1,103 @@
 
-
-
-body{
-    font-family: roboto;
-}
-
-
-.navbar{
-    background-color: #0a5da9!important;
-    padding-left: 0px;
-    padding-bottom: 0px;
-    padding-top: 0px;
-}
+@media(max-width:599px){
+  
+    div.container {
+        width: 80%;
+    }
+    .dt-button-collection {
+        max-height: 75px;
+        overflow-y: scroll;
+    }
+    table.dataTable.nowrap th, table.dataTable.nowrap td{
+        white-space: normal!important;
+    }
+    .btn-group, .btn-group-vertical
+    {
+        display: block;
+    }
+    .btn{
+        margin: auto!important;
+        display: block;
+    }
+    .navbar{
+        background-color: transparent !important;
+        height: 5em;
+        flex-wrap: nowrap;
+        flex-direction: column;
+    
+    }
 img{
-    width: 120px;
+
 }
-#bienvenue{
-    display: none;
-    margin-bottom: 0px;
-    color: white;
-    font-size: 40px;
 }
-.ml-auto{
-    margin-left: 0px!important;
+/* Small devices (landscape phones, 576px and up)*/
+@media(min-width:600px){
+    
+    .navbar{
+    }
 }
-#recherche{
-    background-color: lightcoral;
+@media(min-width:768px){}
+@media(min-width:992px){}
+@media(min-width:1200px) {
+    body{
+        font-family: roboto;
+    }
+    
+    .searchStyle
+    {
+    padding: 5px 12px;
+    margin-top: -28px;
+    }
+    .navbar{
+        background-color: green!important;
+        padding-left: 0px;
+        padding-bottom: 0px;
+        padding-top: 0px;
+    }
+    img{
+        width: 120px;
+    }
+    #bienvenue{
+        display: none;
+        margin-bottom: 0px;
+        color: white;
+        font-size: 40px;
+    }
+    .ml-auto{
+        margin-left: 0px!important;
+    }
+    #recherche{
+        background-color: lightcoral;
+    }
+    
+    #example_wrapper{
+    
+        padding: 20px;
+    }
+    input{
+        border-radius: 20px;
+    }
+    .paginate_button:hover{
+        background-color: none;
+    }
+    tr{
+        cursor:pointer;
+    }
+    .sorting_1{
+        width: 10px;
+    }
+    th{
+        background-color: aliceblue;
+    }
+    .form-inline{
+        display: block !important;
+    }
+    .container{
+    
+       margin-top:14px!important; 
+    }
+    .sorting_1{
+        width: 10px;
+    }
 }
 
-#example_wrapper{
-
-    padding: 20px;
-}
-input{
-    border-radius: 20px;
-}
-.paginate_button:hover{
-    background-color: none;
-}
-tr{
-    cursor:pointer;
-}
-.sorting_1{
-    width: 10px;
-}
-th{
-    background-color: aliceblue;
-}
-.form-inline{
-    display: block !important;
-}
-.container{
-
-   margin-top:14px!important; 
-}
-.sorting_1{
-    width: 10px;
-}

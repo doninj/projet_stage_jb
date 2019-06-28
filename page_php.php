@@ -37,16 +37,19 @@ last_modification = $dataInformation['Update_time'];
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CSV to HTML Table Example</title>
+    <title>VM décentralisé: informations</title>
     <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
-    <!-- Bootstrap core CSS -->
+                            <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href=https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css>
-
+                            <!-- style css de remplacement des paramètres bootstrap et style de base-->
     <link rel="stylesheet" href="css/style.css">
+                            <!-- style css pour introduire la datatable avec bootstrap-->
+    <link rel="stylesheet" href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css'>
+                            <!-- style css pour les boutons de la datatable en bootstrap-->
+    <link ref="stylesheet" href='https://cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap4.min.css'>
+                            <!-- style css pour le fixedheader de la datatable-->
+    <link ref="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.5/css/fixedHeader.dataTables.min.css">
 
-   <link rel="stylesheet" href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css'>
-
-<link ref="stylesheet" href='https://cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap4.min.css'>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -56,22 +59,19 @@ last_modification = $dataInformation['Update_time'];
 </head>
 
 <body>
-    //*header pour la barre de présentation
     <header>
 
-        <nav id="nav" class="navbar navbar-expand-md navbar-dark bg-primary">
+        <nav id="nav" class="navbar navbar-expand-sm navbar-dark bg-primary">
             <img src="image/carrefour.png">
 
 
 
-            <ul class="navbar-nav mx-auto">
+            <!--<ul class="navbar-nav mx-auto sm-12">
                 <li class="nav-item">
-                    <p id="bienvenue">Date de modification: <?php // echo $last_modification ?></p>
+                <p id="bienvenue">Date de modification: <?php // echo $last_modification ?></p>
                 </li>
-            </ul>
+            </ul>    -->
 
-            </li>
-            </ul>
             </div>
     </header>
     <?php
@@ -83,7 +83,7 @@ last_modification = $dataInformation['Update_time'];
     <div class="container">
         <div class="table-responsive">
             <!-- creation de la table -->
-            <table id="employee_data" class="table table-striped table-hover dt-responsive display nowrap" width="100%">>
+            <table id="employee_data" class="table table-striped table-bordered nowrap" width="100%">
                 <thead>
                     <tr>
                         <td>Ville</td>
@@ -133,6 +133,11 @@ while ($row=$querySelect->fetch())
 <script src='https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js'></script>
 <script src='https://cdn.datatables.net/buttons/1.5.6/js/buttons.bootstrap4.min.js'></script>
 <script src='https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js'></script>
+                        <!-- script pour fixer l'entête -->
+<script src="https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js"></script>
+                        <!-- script pour responsive-->
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
 <script>
     $(document).ready(function () {
 
@@ -140,19 +145,26 @@ while ($row=$querySelect->fetch())
         $('#bienvenue').fadeIn(4000);
 
         //fonction qui permet d'afficher une sous-table lors d'un clique sur une ligne
-        function format(d) {
+       /* function format(d) {
 
             return '<table  style="display:inline;" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
                 '<tr>' +
                 '<td> OS :</td>' +
-                '<td>' + '<?php echo "coucou" ?>' + '</td>' +
+                '<td>' + '<?php // echo "coucou" ?>' + '</td>' +
                 '</tr>' +
                 '</table>';
-        }
-
+        }*/
+        var table = $('#example').DataTable( {
+        fixedHeader: true,
+        buttons: [
+            'colvis'
+        ]
+    } );
+    table.destroy();
         //permet d'initali
         var table = $("#employee_data").DataTable();
 
+        /*
         $('#employee_data tbody').on('click', 'tr', function () {
             var tr = $(this).closest('tr');
             var row = table.row(tr);
@@ -167,11 +179,23 @@ while ($row=$querySelect->fetch())
                 tr.addClass('shown');
 
             }
-
-        });
+*/
+        
+        
         table.destroy();
 
         $("#employee_data").DataTable({
+            lengthMenu : [ 5,10, 25, 50, 75, 100 ],
+            dom: "<'row'<'col'l><'col'B><'col'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+
+        buttons: [
+            {
+                //rajoute du bouton de la visibilté des colonnes
+                extend: 'colvis',
+            }
+        ],  
+
+             // permet de mettre le tableau en responsive
             "responsive": true,
 
             rowCallback: function (row, data, index) {
@@ -201,7 +225,8 @@ while ($row=$querySelect->fetch())
                 }
 
             }
-        }); //fin de 
+        
+        });
     }); //fin du script
 
    
