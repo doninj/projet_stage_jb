@@ -10,7 +10,7 @@ try
     */
     
     //connexion avec mysql
-    $hostname="mysql:host=locahost;dbname=carrefour";
+    $hostname="mysql:host=127.0.0.1;dbname=carrefour_siite";
     $username="root";
     $password="";
 
@@ -23,8 +23,8 @@ catch(Exception $e)
      die('Erreur : '.$e->getMessage());
 }
 
-
-$querySelect = $bdd->query('SELECT ville,vm,disque,freepourcent,capacity,freemb,os FROM carrefour_sitte');
+$querySelect=$bdd->query('SELECT VILLE,VM,disque,cast(Capacity as decimal)as Capacity,cast(Free2 as decimal)as Free2,FreeP,OS from site_carrefour');
+//$querySelect = $bdd->query('SELECT ville,vm,disque,freepourcent,capacity,freemb,os FROM carrefour_sitte');
 
 /* /!\ cela ne marche qu'avec phpmydamin /!\
 
@@ -86,7 +86,7 @@ last_modification = $dataInformation['Update_time'];
             affiche la date de modification 
             <ul class="navbar-nav mx-auto sm-12">
                 <li class="nav-item">
-                <p id="bienvenue">Date de modification: <?php // echo $last_modification ?></p>
+                <p id="bienvenue">informations du: <?php // echo $last_modification ?></p>
                 </li>
             </ul>    -->
 
@@ -99,13 +99,13 @@ last_modification = $dataInformation['Update_time'];
             <table id="employee_data" class="table table-striped table-bordered nowrap" width="100%">
                 <thead>
                     <tr>
-                        <td>Ville</td>
-                        <td>VM</td>
-                        <td> DISK</td>
-                        <td>capa MB</td>
-                        <td>Free MB </td>
-                        <td> free % </td>
-                        <td> OS </td>
+                        <td id="headerTab"> Ville</td>
+                        <td id="headerTab">VM</td>
+                        <td id="headerTab">disk</td>
+                        <td id="headerTab">capacité <br>Total Go</td>
+                        <td id="headerTab">capaicté <br>libre Go  </td>
+                        <td id="headerTab"> capacité en % libre </td>
+                        <td id="headerTab"> OS </td>
                     </tr>
                 </thead>
 
@@ -117,15 +117,15 @@ while ($row=$querySelect->fetch())
 ?>
                 <tr>
                     <!-- attention! Mettre dans $row le nom indiqué dans la base de donnée.-->
-                    <td><?php echo $row["ville"];?></td>
-                    <td><?php echo $row["vm"];?></td>
+                    <td><?php echo $row["VILLE"];?></td>
+                    <td><?php echo $row["VM"];?></td>
                     <td><?php echo $row["disque"];?></td>
 
-                    <td><?php echo $row["capacity"];?></td>
-                    <td><?php echo $row["freemb"];?></td>
-                    <td><?php echo $row["freepourcent"];?></td>
+                    <td><?php echo $row["Capacity"];?></td>
+                    <td><?php echo $row["Free2"];?></td>
+                    <td><?php echo $row["FreeP"];?></td>
 
-                    <td><?php echo $row["os"];?></td>
+                    <td><?php echo $row["OS"];?></td>
 
                 </tr>
 <?php  
@@ -179,6 +179,7 @@ while ($row=$querySelect->fetch())
         table.destroy();
 
         $("#employee_data").DataTable({
+            "order": [[ 5, "asc" ]],
             lengthMenu : [ 5,10, 25, 50, 75, 100 ],
             dom: "<'row'<'col'l><'col'B><'col'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
 
