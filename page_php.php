@@ -2,8 +2,20 @@
 
 try
 {
-	// On se connecte à MySQL
-	$bdd = new PDO("pgsql:host=localhost;dbname=postgres","postgres","root");
+    /*pour du postgres
+    //variable pour changer les paramètres de la base de données.
+    $hostname="pgsql:host=localhost;dbname=postgres";
+    $username="postgres";
+    $password="root";
+    */
+    
+    //connexion avec mysql
+    $hostname="mysql:host=locahost;dbname=carrefour";
+    $username="root";
+    $password="";
+
+	// On se connecte à la base de donnée
+	$bdd = new PDO($hostname,$username,$password);
 }
 catch(Exception $e)
 {
@@ -11,9 +23,11 @@ catch(Exception $e)
      die('Erreur : '.$e->getMessage());
 }
 
+
 $querySelect = $bdd->query('SELECT ville,vm,disque,freepourcent,capacity,freemb,os FROM carrefour_sitte');
 
-/*
+/* /!\ cela ne marche qu'avec phpmydamin /!\
+
 requête pour recuperer les informations de la base de donnée 
 $requêteInformation = "SHOW TABLE STATUS LIKE 'carrefour_sitte'";
 
@@ -61,12 +75,16 @@ last_modification = $dataInformation['Update_time'];
 <body>
     <header>
 
+
         <nav id="nav" class="navbar navbar-expand-sm navbar-dark bg-primary">
             <img src="image/carrefour.png">
 
 
 
-            <!--<ul class="navbar-nav mx-auto sm-12">
+            
+            <!--  /!\ marche qu'avec phpmydamin /!\ 
+            affiche la date de modification 
+            <ul class="navbar-nav mx-auto sm-12">
                 <li class="nav-item">
                 <p id="bienvenue">Date de modification: <?php // echo $last_modification ?></p>
                 </li>
@@ -74,11 +92,6 @@ last_modification = $dataInformation['Update_time'];
 
             </div>
     </header>
-    <?php
-    /*test d'affichage pour la date de modification 
-     echo $last_modification 
-     */
-    ?>
 
     <div class="container">
         <div class="table-responsive">
@@ -154,34 +167,15 @@ while ($row=$querySelect->fetch())
                 '</tr>' +
                 '</table>';
         }*/
+        // initialisation du datatable
         var table = $('#example').DataTable( {
-        fixedHeader: true,
-        buttons: [
-            'colvis'
-        ]
-    } );
-    table.destroy();
-        //permet d'initali
-        var table = $("#employee_data").DataTable();
-
-        /*
-        $('#employee_data tbody').on('click', 'tr', function () {
-            var tr = $(this).closest('tr');
-            var row = table.row(tr);
-
-            if (row.child.isShown()) {
-                // ferme les row si il est ouvert
-                row.child.hide();
-                tr.removeClass('shown');
-            } else {
-                // Ouvre les rows
-                row.child(format(row.data())).show();
-                tr.addClass('shown');
-
-            }
-*/
-        
-        
+            fixedHeader: true,
+            buttons: 
+            [
+                'colvis'
+            ]
+         } );
+  
         table.destroy();
 
         $("#employee_data").DataTable({
