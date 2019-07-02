@@ -36,6 +36,7 @@ img{
     .navbar{
     }
 }
+
 @media(min-width:768px){}
 @media(min-width:992px){}
 @media(min-width:1200px) {
@@ -43,13 +44,17 @@ img{
         font-family: roboto;
     }
     
+    .btn-group > .btn:first-child {
+     margin-right: 12px;
+
+    }
     .searchStyle
     {
     padding: 5px 12px;
     margin-top: -28px;
     }
     .navbar{
-        background-color: green!important;
+        background-color: #0b59a1!important;
         padding-left: 0px;
         padding-bottom: 0px;
         padding-top: 0px;

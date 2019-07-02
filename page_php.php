@@ -10,7 +10,7 @@ try
     */
     
     //connexion avec mysql
-    $hostname="mysql:host=locahost;dbname=carrefour";
+    $hostname="mysql:host=127.0.0.1;dbname=carrefour_siite";
     $username="root";
     $password="";
 
@@ -22,9 +22,8 @@ catch(Exception $e)
 	//* En cas d'erreur, on affiche un message et on arrête tout
      die('Erreur : '.$e->getMessage());
 }
-
-
-$querySelect = $bdd->query('SELECT ville,vm,disque,freepourcent,capacity,freemb,os FROM carrefour_sitte');
+$querySelect=$bdd->query('SELECT VILLE,VM,disque,cast(Capacity as decimal)as Capacity,cast(Free2 as decimal)as Free2,FreeP,OS from carrefour_site');
+//$querySelect = $bdd->query('SELECT ville,vm,disque,freepourcent,capacity,freemb,os FROM carrefour_sitte');
 
 /* /!\ cela ne marche qu'avec phpmydamin /!\
 
@@ -52,6 +51,8 @@ last_modification = $dataInformation['Update_time'];
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>VM décentralisé: informations</title>
+    <script src="https://kit.fontawesome.com/f3d01edde9.js"></script>
+
     <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
                             <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href=https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css>
@@ -86,7 +87,7 @@ last_modification = $dataInformation['Update_time'];
             affiche la date de modification 
             <ul class="navbar-nav mx-auto sm-12">
                 <li class="nav-item">
-                <p id="bienvenue">Date de modification: <?php // echo $last_modification ?></p>
+                <p id="bienvenue">informations du: <?php // echo $last_modification ?></p>
                 </li>
             </ul>    -->
 
@@ -99,13 +100,13 @@ last_modification = $dataInformation['Update_time'];
             <table id="employee_data" class="table table-striped table-bordered nowrap" width="100%">
                 <thead>
                     <tr>
-                        <td>Ville</td>
-                        <td>VM</td>
-                        <td> DISK</td>
-                        <td>capa MB</td>
-                        <td>Free MB </td>
-                        <td> free % </td>
-                        <td> OS </td>
+                        <td >Ville</td>
+                        <td >disk</td>
+                        <td >VM</td>
+                        <td >capacité <br>Total Go</td>
+                        <td >capaicté <br>libre Go  </td>
+                        <td >capacité en % libre </td>
+                        <td >OS </td>
                     </tr>
                 </thead>
 
@@ -117,15 +118,15 @@ while ($row=$querySelect->fetch())
 ?>
                 <tr>
                     <!-- attention! Mettre dans $row le nom indiqué dans la base de donnée.-->
-                    <td><?php echo $row["ville"];?></td>
-                    <td><?php echo $row["vm"];?></td>
+                    <td><?php echo $row["VILLE"];?></td>
+                    <td><?php echo $row["VM"];?></td>
                     <td><?php echo $row["disque"];?></td>
 
-                    <td><?php echo $row["capacity"];?></td>
-                    <td><?php echo $row["freemb"];?></td>
-                    <td><?php echo $row["freepourcent"];?></td>
+                    <td><?php echo $row["Capacity"];?></td>
+                    <td><?php echo $row["Free2"];?></td>
+                    <td><?php echo $row["FreeP"];?></td>
 
-                    <td><?php echo $row["os"];?></td>
+                    <td><?php echo $row["OS"];?></td>
 
                 </tr>
 <?php  
@@ -150,6 +151,9 @@ while ($row=$querySelect->fetch())
 <script src="https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js"></script>
                         <!-- script pour responsive-->
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -170,24 +174,41 @@ while ($row=$querySelect->fetch())
         // initialisation du datatable
         var table = $('#example').DataTable( {
             fixedHeader: true,
-            buttons: 
-            [
-                'colvis'
-            ]
+
          } );
   
         table.destroy();
 
         $("#employee_data").DataTable({
+            "order": [[ 5, "asc" ]],
             lengthMenu : [ 5,10, 25, 50, 75, 100 ],
             dom: "<'row'<'col'l><'col'B><'col'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+           //dom: 'Bfrtip',
+           buttons:
+            [
+           
+                {
+                    //ajout d'un bouton d'export csv
+                    extend: 'csvHtml5',
+                    //ajout d'un icon
+                    text: '<i class="fas fa-file-csv"></i>',
+                    //ajout d'un titre lors du survolage
+                    titleAttr: ' exporter CSV',
 
-        buttons: [
-            {
-                //rajoute du bouton de la visibilté des colonnes
-                extend: 'colvis',
-            }
-        ],  
+                    exportOptions: 
+                    {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'colvis',
+                    //ajout d'un icon
+                    text:'<i class="fas fa-filter"></i>',
+                    //ajout d'un titre lors du survolage
+                    titleAttr: ' filtrer les colonnes',
+
+                },
+        ], 
 
              // permet de mettre le tableau en responsive
             "responsive": true,
@@ -195,28 +216,24 @@ while ($row=$querySelect->fetch())
             rowCallback: function (row, data, index) {
 
                 //condition si data[5]>60 donc si l'une des valeurs de la colonne 5 est superieur à 60
-                if (data[5] > 20 && data[5] < 60) {
-                    // find ('td:eq(5)) permet de selectionner la 5ème colonne//
-                    $(row).find('td:eq(5)').css('background-color', 'lightcoral');
-                    $(row).find('td:eq(5)').css('color', 'white');
-                }
-
-                if (data[5] >= 60 && data[5] < 80) {
-                    $(row).find('td:eq(5)').css('background-color', 'rgb(10, 93, 169,0.7');
-                    $(row).find('td:eq(5)').css('color', 'white');
-
-                }
-                if (data[5] >= 80) {
-                    $(row).find('td:eq(5)').css('background-color', 'rgb(10, 93, 169,0.9');
-                    $(row).find('td:eq(5)').css('color', 'white');
-
-                }
-
-                if (data[5] <= 20) {
+                if (data[5] >= 0 && data[5] < 10) {
                     // find ('td:eq(5)) permet de selectionner la 5ème colonne//
                     $(row).find('td:eq(5)').css('background-color', 'red');
                     $(row).find('td:eq(5)').css('color', 'white');
                 }
+
+                if (data[5] >= 10 && data[5] < 20) {
+                    $(row).find('td:eq(5)').css('background-color', '#F8E71C');
+                    $(row).find('td:eq(5)').css('color', 'black');
+
+                }
+                if (data[5] >= 20) {
+                    $(row).find('td:eq(5)').css('background-color', 'green');
+                    $(row).find('td:eq(5)').css('color', 'white');
+
+                }
+
+ 
 
             }
         
