@@ -20,7 +20,7 @@ try
 catch(Exception $e)
 {
 	//* En cas d'erreur, on affiche un message et on arrête tout
-     die('Erreur : '.$e->getMessage());
+     die('Erreur : '.$e->getMessage())f;
 }
 $querySelect=$bdd->query('SELECT VILLE,VM,disque,cast(Capacity as decimal)as Capacity,cast(Free2 as decimal)as Free2,FreeP,OS from carrefour_site');
 //$querySelect = $bdd->query('SELECT ville,vm,disque,freepourcent,capacity,freemb,os FROM carrefour_sitte');
