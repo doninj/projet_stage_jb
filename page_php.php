@@ -10,11 +10,13 @@ try
     */
     
     //connexion avec mysql
+
     $hostname="mysql:host=127.0.0.1;dbname=carrefour_siite";
     $username="root";
     $password="";
 
-	// On se connecte à la base de donnée
+    // On se connecte à la base de donnée
+    
 	$bdd = new PDO($hostname,$username,$password);
 }
 catch(Exception $e)
@@ -22,9 +24,11 @@ catch(Exception $e)
 	//* En cas d'erreur, on affiche un message et on arrête tout
      die('Erreur : '.$e->getMessage());
 }
+
 $querySelect=$bdd->query('SELECT VILLE,VM,disque,cast(Capacity as decimal)as Capacity,cast(Free2 as decimal)as Free2,FreeP,OS from carrefour_site');
 //$querySelect = $bdd->query('SELECT ville,vm,disque,freepourcent,capacity,freemb,os FROM carrefour_sitte');
-
+$res=$querySelect->fetch();
+$res=$res['OS'];
 /* /!\ cela ne marche qu'avec phpmydamin /!\
 
 requête pour recuperer les informations de la base de donnée 
@@ -110,7 +114,7 @@ last_modification = $dataInformation['Update_time'];
                     </tr>
                 </thead>
 
-
+<tbody>
 <?php
 //affiche les ligne de la base de donnée une à une dans un tableau
 while ($row=$querySelect->fetch())
@@ -132,6 +136,19 @@ while ($row=$querySelect->fetch())
 <?php  
 } //fin du tableau: toute les données de la bdd sont dans le tableau
 ?>
+</tbody>
+<tfoot>
+                        <tr>
+                        <th>Ville</th>
+                        <th>disk</th>
+                        <th>VM</th>
+                        <th>capacité <br>Total Go</th>
+                        <th>capaicté <br>libre Go</th>
+                        <th>capacité en % libre </th>
+                        <th>OS </th>
+                    </tr>
+</tfoot>
+
             </table>
         </div>
     </div>
@@ -158,24 +175,61 @@ while ($row=$querySelect->fetch())
 <script>
     $(document).ready(function () {
 
-        //fonction simple qui permet d'afficher progressivement l"heure
-        $('#bienvenue').fadeIn(4000);
-
+        $('#employee_data tfoot th').each( function () {
+        var title = $(this).text();
+        $(this).html( '<input  id="search" type="text" placeholder="Search" />' );
+    } );
+    // DataTable
+ 
+   
         //fonction qui permet d'afficher une sous-table lors d'un clique sur une ligne
-       /* function format(d) {
+        function format(d) {
 
             return '<table  style="display:inline;" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
                 '<tr>' +
                 '<td> OS :</td>' +
-                '<td>' + '<?php // echo "coucou" ?>' + '</td>' +
+                '<td>' + '<?php echo $res;?>' + '</td>' +
                 '</tr>' +
                 '</table>';
-        }*/
+                
+               
+        }
         // initialisation du datatable
-        var table = $('#example').DataTable( {
-            fixedHeader: true,
+        
+        var table=$("#employee_data").DataTable();
+$('#employee_data tbody').on('click', 'tr', function () {
+          var tr = $(this).closest('tr');
+        var row = table.row( tr );
+        
+        if ( row.child.isShown() ) {
+            // ferme les row si il est ouvert
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Ouvre les rows
+            row.child( format(row.data()) ).show(); 
+            tr.addClass('shown');
 
-         } );
+        }
+       
+    });
+            
+           
+           
+           /* table.columns().every( function () {
+        var that = this;
+ 
+        $( 'input', this.footer() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );*/
+
+         
   
         table.destroy();
 
@@ -209,6 +263,7 @@ while ($row=$querySelect->fetch())
 
                 },
         ], 
+        
 
              // permet de mettre le tableau en responsive
             "responsive": true,

@@ -43,7 +43,10 @@ img{
     body{
         font-family: roboto;
     }
-    
+    #search{
+        width: 80%;
+        text-align: center;
+    }
     .btn-group > .btn:first-child {
      margin-right: 12px;
 
@@ -80,7 +83,7 @@ img{
         padding: 20px;
     }
     input{
-        border-radius: 20px;
+        /*border-radius: 20px;*/
     }
     .paginate_button:hover{
         background-color: none;
